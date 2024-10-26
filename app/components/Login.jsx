@@ -7,13 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { auth } from '../firebaseConfig';
 import { sendSignInLinkToEmail, RecaptchaVerifier, signInWithPhoneNumber, signInWithCredential, PhoneAuthProvider } from "firebase/auth";
-import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
 
-import {
-    InputOTP,
-    InputOTPGroup,
-    InputOTPSlot,
-} from "@/components/ui/input-otp";
 
 const Login = () => {
     const [email, setEmail] = useState('');
