@@ -1,9 +1,8 @@
-// app/page.jsx
 'use client'
 import { useEffect, useState } from 'react';
 import { auth } from './firebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth';
-import Login from './components/Login';
+import Login from './components/auth/Login';
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 
 export default function Home() {
@@ -28,7 +27,7 @@ export default function Home() {
                         </ScrollArea>
                     </div>
                     :
-                    <Login />
+                    <Login headerImage={'https://images.unsplash.com/photo-1580191947416-62d35a55e71d?q=80&w=2071&auto=format&fit=crop'} />
             }
         </div>
     );
