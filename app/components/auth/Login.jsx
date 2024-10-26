@@ -82,8 +82,8 @@ const Login = ({
                 >
                     {showOtherMethods && (
                         <div className="space-y-4 mt-4">
-                            {showGithub && <GithubAuthentication />}
                             {showGoogle && <GoogleAuthentication showOneTapSignIn={false} />}
+                            {showGithub && <GithubAuthentication />}
                             {showAnonymous && <AnynomousAuthentication />}
                         </div>
                     )}
