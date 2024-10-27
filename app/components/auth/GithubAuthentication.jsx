@@ -18,7 +18,7 @@ const GithubAuthentication = () => {
 
         try {
             const result = await signInWithPopup(auth, provider);
-            
+
             // Get GitHub access token for future API calls if needed
             const credential = GithubAuthProvider.credentialFromResult(result);
             const token = credential?.accessToken;
@@ -33,24 +33,26 @@ const GithubAuthentication = () => {
                 sessionStorage.setItem('github_token', token);
             }
 
-            toast({ 
-                title: "Success", 
-                description: `Signed in as ${user.displayName || user.email}` 
+            toast({
+                title: "Success",
+                description: `Signed in as ${user.displayName || user.email}`
             });
 
         } catch (error) {
-            console.error('Error signing in with GitHub:', error);
-            
+            toast({
+                title: "Error signing in with GitHub",
+                description: error
+            });
             // Handle specific error cases
             if (error.code === 'auth/account-exists-with-different-credential') {
-                toast({ 
-                    title: "Account Exists", 
-                    description: "An account already exists with the same email address but different sign-in credentials. Try signing in using the original method." 
+                toast({
+                    title: "Account Exists",
+                    description: "An account already exists with the same email address but different sign-in credentials. Try signing in using the original method."
                 });
             } else {
-                toast({ 
-                    title: "Error", 
-                    description: error.message 
+                toast({
+                    title: "Error",
+                    description: error.message
                 });
             }
         } finally {

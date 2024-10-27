@@ -19,7 +19,6 @@ const GoogleOneTapSignIn = () => {
                 description: `Signed in as ${result.user.email}`,
             });
         } catch (error) {
-            console.error('Error with Firebase sign-in:', error);
             toast({
                 title: "Error",
                 description: error.message,
@@ -55,7 +54,7 @@ const GoogleOneTapSignIn = () => {
                 async
                 defer
                 onLoad={() => setIsSdkLoaded(true)}
-                onError={() => console.error('Failed to load Google Identity Services SDK')}
+                onError={() => toast({ title: 'Failed to Load', description: 'Failed to load Google Identity Services SDK' })}
             />
         </>
     );

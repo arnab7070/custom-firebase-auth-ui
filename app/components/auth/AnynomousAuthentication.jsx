@@ -18,7 +18,6 @@ const AnynomousAuthentication = () => {
                 description: `Signed in anonymously. ID: ${result.user.uid}` 
             });
         } catch (error) {
-            console.error('Error signing in anonymously:', error);
             toast({ 
                 title: "Error", 
                 description: error.message 

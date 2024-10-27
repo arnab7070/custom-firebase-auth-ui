@@ -1,197 +1,159 @@
-Here’s a concise tutorial on how to use the `useAuth` context in any component of your application, as well as how to call your `Login` component with props.
 
----
-
-# Using the `useAuth` Context and the `Login` Component
+# README.md
 
 ## Overview
 
-This tutorial explains how to set up the `useAuth` context for user authentication and how to utilize the `Login` component in your Next.js application.
+This application is a user authentication system built with Next.js and Firebase. It provides various authentication methods, including email link sign-in, phone number authentication, and social logins (Google, GitHub). This README will guide you through setting up the application, customizing the login component, and handling the user object.
 
-### Step 1: Setting Up the Auth Context
+## Table of Contents
 
-Before using the `useAuth` hook, ensure you have an `AuthProvider` set up to provide the authentication state throughout your application.
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Firebase Configuration](#firebase-configuration)
+- [Running the Application](#running-the-application)
+- [Handling User Object](#handling-user-object)
+- [Customizing the Login Component](#customizing-the-login-component)
+- [Available Authentication Methods](#available-authentication-methods)
+- [Contributing](#contributing)
 
-```javascript
-// src/context/AuthContext.js
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { auth } from './firebaseConfig'; // Your firebase configuration
-import { onAuthStateChanged } from 'firebase/auth';
+## Prerequisites
 
-const AuthContext = createContext();
+Before you begin, ensure you have the following installed:
 
-export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
+- Node.js (v14 or later)
+- npm or yarn
+- A Firebase project
 
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-            setUser(currentUser);
-            setLoading(false);
-        });
+## Installation
 
-        return () => unsubscribe();
-    }, []);
+1. Clone the repository:
 
-    return (
-        <AuthContext.Provider value={{ user, loading }}>
-            {children}
-        </AuthContext.Provider>
-    );
-};
+   ```bash
+   git clone <repository-url>
+   cd <repository-name>
+   ```
 
-export const useAuth = () => {
-    return useContext(AuthContext);
-};
+2. Install the dependencies:
+
+   ```bash
+   npm install
+   ```
+
+   or
+
+   ```bash
+   yarn install
+   ```
+
+## Firebase Configuration
+
+1. Create a Firebase project in the [Firebase Console](https://console.firebase.google.com/).
+
+2. Enable the authentication methods you want to use (Email/Password, Phone, Google, GitHub) in the Firebase Console under the "Authentication" section.
+
+3. Copy the Firebase configuration object from your project settings and replace the configuration in `app/firebaseConfig.js`:
+
+   ```javascript
+   const firebaseConfig = {
+       apiKey: "YOUR_API_KEY",
+       authDomain: "YOUR_AUTH_DOMAIN",
+       projectId: "YOUR_PROJECT_ID",
+       storageBucket: "YOUR_STORAGE_BUCKET",
+       messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+       appId: "YOUR_APP_ID"
+   };
+   ```
+
+## Running the Application
+
+To start the development server, run:
+
+```bash
+npm run dev
 ```
 
-### Step 2: Wrapping Your Application with AuthProvider
+or
 
-Wrap your application with the `AuthProvider` so that any component can access the authentication state.
-
-```javascript
-// src/app/_app.js
-import React from 'react';
-import { AuthProvider } from '../context/AuthContext';
-
-const MyApp = ({ Component, pageProps }) => {
-    return (
-        <AuthProvider>
-            <Component {...pageProps} />
-        </AuthProvider>
-    );
-};
-
-export default MyApp;
+```bash
+yarn dev
 ```
 
-### Step 3: Using `useAuth` in Any Component
+Open your browser and navigate to `http://localhost:3000`.
 
-You can now use the `useAuth` hook in any component to access the user and loading states. Here’s an example of using it in the `Home` component:
+## Handling User Object
+
+The user object is managed using the `useAuth` hook provided in the `context/authContext.js` file. You can access the user object and loading state as follows:
 
 ```javascript
-// src/app/Home.js
-import React from 'react';
-import { useAuth } from '../context/AuthContext';
-import Login from './components/auth/Login';
+import { useAuth } from './context/authContext';
 
-const Home = () => {
+const YourComponent = () => {
     const { user, loading } = useAuth();
 
     if (loading) {
         return <p>Loading...</p>;
     }
 
-    return (
-        <div className="flex justify-center items-center min-h-screen">
-            {user ? (
-                <h2>Welcome, {user.displayName}!</h2>
-            ) : (
-                <Login
-                    title="Welcome Back!"
-                    description="Please log in to access your account."
-                    showEmail={true}
-                    showPhone={true}
-                    showGoogle={true}
-                    showGithub={true}
-                    showAnonymous={true}
-                    customStyles={{
-                        card: 'bg-gray-800',
-                        icon: 'text-blue-500',
-                        title: 'text-yellow-300',
-                        description: 'text-red-400'
-                    }}
-                />
-            )}
-        </div>
-    );
-};
+    if (user) {
+        return <p>Welcome, {user.displayName || user.email}!</p>;
+    }
 
-export default Home;
+    return <p>Please log in.</p>;
+};
 ```
 
-### Step 4: Calling the `Login` Component with Props
+### User Object Properties
 
-In the above example, you can see how to call the `Login` component and pass props to customize its behavior and appearance:
+The user object contains various properties, including:
 
-- **`title`**: The title displayed on the login card. Here, it’s set to `"Welcome Back!"`.
-- **`description`**: The description that appears below the title. Set to `"Please log in to access your account."`.
-- **`showEmail`**: A boolean that determines if the email login form is shown. Set to `true`.
-- **`showPhone`**: A boolean that determines if the phone login form is shown. Set to `true`.
-- **`showGoogle`**: A boolean to enable Google authentication. Set to `true`.
-- **`showGithub`**: A boolean to enable GitHub authentication. Set to `true`.
-- **`showAnonymous`**: A boolean to allow anonymous login. Set to `true`.
-- **`customStyles`**: An object to apply custom styles for different parts of the card (e.g., card background color, icon color).
+- `uid`: Unique identifier for the user.
+- `email`: User's email address.
+- `displayName`: User's display name (if available).
+- `photoURL`: URL of the user's profile picture (if available).
 
-### Example of Customized `Login` Component
+## Customizing the Login Component
 
-Here’s how the `Login` component can be customized:
+The login component is located in `app/components/auth/Login.jsx`. You can customize the login component by passing props to it. Here are the available props:
+
+- `showEmail`: Boolean to show/hide email login form (default: true).
+- `showPhone`: Boolean to show/hide phone login form (default: true).
+- `showGoogle`: Boolean to show/hide Google login button (default: true). Additionally, `showOneTapSignIn` can be passed as a prop to GoogleAuthentication to enable or disable one-tap sign-in.
+- `showGithub`: Boolean to show/hide GitHub login button (default: true).
+- `showAnonymous`: Boolean to show/hide anonymous login button (default: true).
+- `title`: Custom title for the login modal (default: "Login").
+- `description`: Custom description for the login modal (default: "Please Sign In to Website").
+- `headerImage`: Custom header image for the login modal.
+- `size`: Size of the modal ("small", "medium", "large").
+- `position`: Position of the modal ("center", "top-left", "top-right", "bottom-left", "bottom-right").
+- `isOpen`: Boolean to control the visibility of the modal (default: false).
+- `onClose`: Function to call when the modal is closed.
+
+### Example Usage
 
 ```javascript
-<Login
-    title="Join Us!"
-    description="Please log in to continue."
+<Login 
     showEmail={true}
-    showPhone={false} // Hide phone login
+    showPhone={false}
     showGoogle={true}
-    showGithub={false} // Hide GitHub login
-    showAnonymous={true}
-    customStyles={{
-        card: 'bg-gray-900', // Darker card background
-        icon: 'text-white', // White icon
-        title: 'text-green-500', // Green title text
-        description: 'text-gray-400' // Gray description text
-    }}
+    title="Welcome Back!"
+    description="Please log in to continue."
+    isOpen={isLoginOpen}
+    onClose={handleCloseLogin}
 />
 ```
 
-### Complete Example of Usage
+## Available Authentication Methods
 
-Here’s a complete example of how to put everything together:
+1. **Email Link Authentication**: Users can sign in using a magic link sent to their email.
+2. **Phone Number Authentication**: Users can sign in using their phone number and receive an OTP.
+3. **Google Authentication**: Users can sign in using their Google account.
+4. **GitHub Authentication**: Users can sign in using their GitHub account.
+5. **Anonymous Authentication**: Users can sign in anonymously without providing any credentials.
 
-```javascript
-// src/app/Home.js
-import React from 'react';
-import { useAuth } from '../context/AuthContext';
-import Login from './components/auth/Login';
+## Contributing
 
-const Home = () => {
-    const { user, loading } = useAuth();
+If you would like to contribute to this project, please fork the repository and submit a pull request. For any issues or feature requests, please open an issue in the repository.
 
-    if (loading) {
-        return <p>Loading...</p>;
-    }
+---
 
-    return (
-        <div className="flex justify-center items-center min-h-screen">
-            {user ? (
-                <h2>Welcome, {user.displayName}!</h2>
-            ) : (
-                <Login
-                    title="Welcome Back!"
-                    description="Please log in to access your account."
-                    showEmail={true}
-                    showPhone={false}
-                    showGoogle={true}
-                    showGithub={true}
-                    showAnonymous={true}
-                    customStyles={{
-                        card: 'bg-gray-800',
-                        icon: 'text-blue-500',
-                        title: 'text-yellow-300',
-                        description: 'text-red-400'
-                    }}
-                />
-            )}
-        </div>
-    );
-};
-
-export default Home;
-```
-
-### Conclusion
-
-With this guide, you can efficiently use the `useAuth` context in any component of your Next.js application to handle user authentication. The `Login` component is customizable and allows for multiple authentication methods. Feel free to adjust the props to match your design and functional needs.
-
-If you have any further questions or need additional examples, feel free to ask!
+This README provides a comprehensive guide for users to set up and customize the authentication system in their own applications. If you have any questions or need further assistance, feel free to reach out!

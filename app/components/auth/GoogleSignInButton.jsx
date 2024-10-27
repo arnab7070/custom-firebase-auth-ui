@@ -20,7 +20,6 @@ const GoogleSignInButton = () => {
                 description: `Signed in as ${result.user.email}`
             });
         } catch (error) {
-            console.error('Error signing in with Google:', error);
             toast({
                 title: "Error",
                 description: error.message
