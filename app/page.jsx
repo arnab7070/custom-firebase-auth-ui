@@ -1,6 +1,6 @@
-'use client';
-import { useState } from 'react';
-import { useAuth } from './context/authContext';  // Make sure this path is correct
+'use client'
+import { useState, useEffect } from 'react';
+import { useAuth } from './context/authContext'; // Make sure this path is correct
 import Login from './components/auth/Login';
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -9,15 +9,6 @@ import { getAuth, signOut } from "firebase/auth";
 export default function Home() {
     const { user, loading } = useAuth();
     const [isLoginOpen, setIsLoginOpen] = useState(false);
-
-    // Show loading state while the authentication check is in progress
-    if (loading) {
-        return (
-            <div className="flex justify-center items-center min-h-screen">
-                <p className="text-white">Loading...</p>
-            </div>
-        );
-    }
 
     const handleOpenLogin = () => {
         setIsLoginOpen(true);
@@ -35,6 +26,22 @@ export default function Home() {
             console.error("Logout failed", error);
         }
     };
+
+    // Close modal automatically after login
+    useEffect(() => {
+        if (user) {
+            setIsLoginOpen(false);
+        }
+    }, [user]);
+
+    // Loading state shown only in the return statement
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center min-h-screen">
+                <p className="text-white">Loading...</p>
+            </div>
+        );
+    }
 
     return (
         <div className="flex justify-center items-center min-h-screen py-10">

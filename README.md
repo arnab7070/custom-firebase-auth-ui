@@ -1,8 +1,11 @@
-# README.md
+Here's the updated `README.md` for your Firebase authentication package, now configured to allow users to set their own Firebase configuration.
+
+```markdown
+# Custom Firebase Auth UI
 
 ## Overview
 
-This application is a user authentication system built with Next.js and Firebase. It provides various authentication methods, including email link sign-in, phone number authentication, and social logins (Google, GitHub). This README will guide you through setting up the application, customizing the login component, and handling the user object.
+This package provides a customizable user authentication system built with Next.js and Firebase. It includes multiple authentication methods such as email link sign-in, phone number authentication, Google, and GitHub logins. This guide explains how to set up the application, customize the login component, and handle the user object, with the flexibility for each user to configure their own Firebase project.
 
 ## Table of Contents
 
@@ -17,7 +20,7 @@ This application is a user authentication system built with Next.js and Firebase
 
 ## Prerequisites
 
-Before you begin, ensure you have the following installed:
+Before you begin, ensure you have:
 
 - Node.js (v14 or later)
 - npm or yarn
@@ -44,15 +47,22 @@ Before you begin, ensure you have the following installed:
    yarn install
    ```
 
+3. Demo: 
+   [https://firebase-auth-ui.vercel.app](https://firebase-auth-ui.vercel.app)
+
 ## Firebase Configuration
 
 1. Create a Firebase project in the [Firebase Console](https://console.firebase.google.com/).
 
-2. Enable the authentication methods you want to use (Email/Password, Phone, Google, GitHub) in the Firebase Console under the "Authentication" section.
+2. Enable the authentication methods you want to use (Email/Password, Phone, Google, GitHub) in the Firebase Console under the **Authentication** section.
 
-3. Copy the Firebase configuration object from your project settings and replace the configuration in `app/firebaseConfig.js`:
+3. Configure Firebase in your application:
+
+   Instead of hardcoding configuration, use the `initializeFirebase` function from this package to pass your own Firebase configuration when initializing the application. Replace the configuration code in your project with the following:
 
    ```javascript
+   import { initializeFirebase } from 'your-package-name';
+
    const firebaseConfig = {
      apiKey: "YOUR_API_KEY",
      authDomain: "YOUR_AUTH_DOMAIN",
@@ -61,6 +71,8 @@ Before you begin, ensure you have the following installed:
      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
      appId: "YOUR_APP_ID",
    };
+
+   const { auth } = initializeFirebase(firebaseConfig);
    ```
 
 ## Running the Application
@@ -77,11 +89,11 @@ or
 yarn dev
 ```
 
-Open your browser and navigate to `http://localhost:3000`.
+Navigate to `http://localhost:3000` to view the application.
 
 ## Handling User Object
 
-The user object is managed using the `useAuth` hook provided in the `context/authContext.js` file. You can access the user object and loading state as follows:
+The user object is managed using the `useAuth` hook provided in the `context/authContext.js` file. Access the user object and loading state as follows:
 
 ```javascript
 import { useAuth } from "./context/authContext";
@@ -103,16 +115,16 @@ const YourComponent = () => {
 
 ### User Object Properties
 
-The user object contains various properties, including:
+The user object contains the following properties:
 
 - `uid`: Unique identifier for the user.
 - `email`: User's email address.
-- `displayName`: User's display name (if available).
-- `photoURL`: URL of the user's profile picture (if available).
+- `displayName`: User's display name, if available.
+- `photoURL`: URL of the user's profile picture, if available.
 
 ## Customizing the Login Component
 
-The login component is located in `app/components/auth/Login.jsx`. You can customize the login component by passing props to it. Here are the available props:
+The login component is located in `app/components/auth/Login.jsx`. Customize the login component by passing props to it. Here are the available props:
 
 - `showEmail`: Boolean to show/hide email login form (default: true).
 - `showPhone`: Boolean to show/hide phone login form (default: true).
@@ -143,16 +155,16 @@ The login component is located in `app/components/auth/Login.jsx`. You can custo
 
 ## Available Authentication Methods
 
-1. **Email Link Authentication**: Users can sign in using a magic link sent to their email.
-2. **Phone Number Authentication**: Users can sign in using their phone number and receive an OTP.
-3. **Google Authentication**: Users can sign in using their Google account.
-4. **GitHub Authentication**: Users can sign in using their GitHub account.
-5. **Anonymous Authentication**: Users can sign in anonymously without providing any credentials.
+1. **Email Link Authentication**: Sign in using a magic link sent to the user's email.
+2. **Phone Number Authentication**: Sign in using a phone number and OTP.
+3. **Google Authentication**: Sign in with a Google account.
+4. **GitHub Authentication**: Sign in with a GitHub account.
+5. **Anonymous Authentication**: Sign in anonymously without credentials.
 
 ## Contributing
 
-If you would like to contribute to this project, please fork the repository and submit a pull request. For any issues or feature requests, please open an issue in the repository.
+To contribute, please fork the repository and submit a pull request. For issues or feature requests, open an issue in the repository.
 
 ---
 
-This README provides a comprehensive guide for users to set up and customize the authentication system in their own applications. If you have any questions or need further assistance, feel free to reach out!
+This README provides a comprehensive guide for setting up and customizing the authentication system. For questions or assistance, please reach out!
