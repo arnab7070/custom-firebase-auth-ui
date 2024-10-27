@@ -1,4 +1,3 @@
-
 # README.md
 
 ## Overview
@@ -29,8 +28,8 @@ Before you begin, ensure you have the following installed:
 1. Clone the repository:
 
    ```bash
-   git clone <repository-url>
-   cd <repository-name>
+   git clone https://github.com/arnab7070/custom-firebase-auth-ui
+   cd custom-firebase-auth-ui
    ```
 
 2. Install the dependencies:
@@ -55,12 +54,12 @@ Before you begin, ensure you have the following installed:
 
    ```javascript
    const firebaseConfig = {
-       apiKey: "YOUR_API_KEY",
-       authDomain: "YOUR_AUTH_DOMAIN",
-       projectId: "YOUR_PROJECT_ID",
-       storageBucket: "YOUR_STORAGE_BUCKET",
-       messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-       appId: "YOUR_APP_ID"
+     apiKey: "YOUR_API_KEY",
+     authDomain: "YOUR_AUTH_DOMAIN",
+     projectId: "YOUR_PROJECT_ID",
+     storageBucket: "YOUR_STORAGE_BUCKET",
+     messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+     appId: "YOUR_APP_ID",
    };
    ```
 
@@ -85,20 +84,20 @@ Open your browser and navigate to `http://localhost:3000`.
 The user object is managed using the `useAuth` hook provided in the `context/authContext.js` file. You can access the user object and loading state as follows:
 
 ```javascript
-import { useAuth } from './context/authContext';
+import { useAuth } from "./context/authContext";
 
 const YourComponent = () => {
-    const { user, loading } = useAuth();
+  const { user, loading } = useAuth();
 
-    if (loading) {
-        return <p>Loading...</p>;
-    }
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
-    if (user) {
-        return <p>Welcome, {user.displayName || user.email}!</p>;
-    }
+  if (user) {
+    return <p>Welcome, {user.displayName || user.email}!</p>;
+  }
 
-    return <p>Please log in.</p>;
+  return <p>Please log in.</p>;
 };
 ```
 
@@ -131,14 +130,14 @@ The login component is located in `app/components/auth/Login.jsx`. You can custo
 ### Example Usage
 
 ```javascript
-<Login 
-    showEmail={true}
-    showPhone={false}
-    showGoogle={true}
-    title="Welcome Back!"
-    description="Please log in to continue."
-    isOpen={isLoginOpen}
-    onClose={handleCloseLogin}
+<Login
+  showEmail={true}
+  showPhone={false}
+  showGoogle={true}
+  title="Welcome Back!"
+  description="Please log in to continue."
+  isOpen={isLoginOpen}
+  onClose={handleCloseLogin}
 />
 ```
 
